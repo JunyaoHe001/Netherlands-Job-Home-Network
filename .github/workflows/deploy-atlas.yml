@@ -1,10 +1,11 @@
-name: Deploy Dutch Municipal Job-Home Spider Network Atlas
+name: Deploy Dutch Municipal Job-Home Network Atlas
 
 on:
   push:
     branches: [main]
     paths:
       - '.github/workflows/deploy-atlas.yml'
+      - '.github/scripts/finalize_release.py'
       - '.deploy-trigger'
   workflow_dispatch:
 
@@ -154,6 +155,12 @@ jobs:
           print('Validation passed: 342 municipalities, 2014–2024, strongest 70% of positive non-self edges only.')
           PY
 
+      - name: Apply final public wording
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 .github/scripts/finalize_release.py /tmp/netherlands-job-home-site
+
       - name: Publish clean site to gh-pages
         shell: bash
         env:
@@ -166,6 +173,6 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
-          git commit -m "Publish Dutch job-home spider network atlas v1.0"
+          git commit -m "Publish Dutch municipal job-home network atlas v1.0.1"
           git remote add origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
           git push --force origin gh-pages
