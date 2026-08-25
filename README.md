@@ -1,11 +1,11 @@
-# Dutch Municipal Job–Home Spider Network Atlas
+# Dutch Municipal Job–Home Network Atlas
 
-Interactive public atlas of Dutch municipality-level home-to-work networks for 2014–2024.
+This atlas shows annual home-to-work links between Dutch municipalities from 2014 to 2024.
 
-## Public release boundary
+## Public release
 
-Within each year, the website publishes only the strongest 70% of positive intermunicipal edges. The weakest 30%, all self-loops, zero-value pairs, original municipality codes, raw Parquet files and the private audit tables are excluded. All displayed municipality metrics are recomputed from the retained public subnetwork.
+The paper is still under review, so the website does not publish the full network. For each year, it includes the strongest 70% of positive links between different municipalities. The remaining 30%, within-municipality links, zero-value pairs, original municipality codes, source files and private audit tables are not included. All municipality measures shown on the site are calculated from the released links only.
 
-## Publication
+## Deployment
 
-The validated static site is generated from the archive in `.release/` and published to the `gh-pages` branch by GitHub Actions.
+GitHub Actions checks the release archive, prepares the public files and publishes the site to the `gh-pages` branch.
