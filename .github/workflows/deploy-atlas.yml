@@ -20,23 +20,22 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v4
 
-      - name: Verify release archive
+      - name: Download and verify validated public release
         shell: bash
         run: |
           set -euo pipefail
-          ARCHIVE=".release/Dutch_JobHome_Spider_Atlas_Public_Top70_v1.zip"
-          test -f "$ARCHIVE"
-          echo "316c4e9ff96bd38e664720d40ec05612292d9c4341010f4e35aea45b28428124  $ARCHIVE" | sha256sum --check --strict
-          unzip -t "$ARCHIVE"
+          URL="https://drive.usercontent.google.com/download?id=1MXNpKZO5nnWX5UmXc7yx2EulJl29j-gP&export=download&confirm=t"
+          curl --fail --location --retry 5 --retry-delay 3 --output /tmp/netherlands-job-home-atlas.zip "$URL"
+          echo "316c4e9ff96bd38e664720d40ec05612292d9c4341010f4e35aea45b28428124  /tmp/netherlands-job-home-atlas.zip" | sha256sum --check --strict
+          unzip -t /tmp/netherlands-job-home-atlas.zip
 
       - name: Extract and validate public site
         shell: bash
         run: |
           set -euo pipefail
-          ARCHIVE=".release/Dutch_JobHome_Spider_Atlas_Public_Top70_v1.zip"
           rm -rf /tmp/netherlands-job-home-site
           mkdir -p /tmp/netherlands-job-home-site
-          unzip -q "$ARCHIVE" -d /tmp/netherlands-job-home-site
+          unzip -q /tmp/netherlands-job-home-atlas.zip -d /tmp/netherlands-job-home-site
 
           required=(
             index.html
