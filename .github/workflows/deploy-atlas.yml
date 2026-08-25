@@ -1,13 +1,171 @@
 name: Deploy Dutch Municipal Job-Home Spider Network Atlas
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/deploy-atlas.yml'
+      - '.deploy-trigger'
   workflow_dispatch:
 
 permissions:
   contents: write
 
+concurrency:
+  group: deploy-netherlands-job-home-network
+  cancel-in-progress: false
+
 jobs:
-  staging:
+  deploy:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
+
     steps:
-      - run: echo "Release chunks are being staged; deployment will be enabled in the final commit."
+      - name: Check out deployment configuration
+        uses: actions/checkout@v4
+
+      - name: Download and verify validated public release
+        shell: bash
+        run: |
+          set -euo pipefail
+          PRIMARY_URL="https://drive.usercontent.google.com/download?id=1MXNpKZO5nnWX5UmXc7yx2EulJl29j-gP&export=download&confirm=t"
+          FALLBACK_URL="https://drive.google.com/uc?export=download&id=1MXNpKZO5nnWX5UmXc7yx2EulJl29j-gP&confirm=t"
+          OUT="/tmp/netherlands-job-home-atlas.zip"
+
+          if ! curl --fail --location --retry 5 --retry-delay 3 --output "$OUT" "$PRIMARY_URL"; then
+            curl --fail --location --retry 5 --retry-delay 3 --output "$OUT" "$FALLBACK_URL"
+          fi
+
+          test "$(stat -c '%s' "$OUT")" -eq 398208
+          echo "316c4e9ff96bd38e664720d40ec05612292d9c4341010f4e35aea45b28428124  $OUT" | sha256sum --check --strict
+          unzip -t "$OUT"
+
+      - name: Extract and validate public site
+        shell: bash
+        run: |
+          set -euo pipefail
+          SITE="/tmp/netherlands-job-home-site"
+          rm -rf "$SITE"
+          mkdir -p "$SITE"
+          unzip -q /tmp/netherlands-job-home-atlas.zip -d "$SITE"
+
+          required=(
+            index.html
+            .nojekyll
+            README.md
+            DATA-NOTES.md
+            SANITISATION.md
+            FILE_MANIFEST.json
+            assets/app.js
+            assets/styles.css
+            data/manifest.json
+            data/map.json
+            data/years/2014.json
+            data/years/2015.json
+            data/years/2016.json
+            data/years/2017.json
+            data/years/2018.json
+            data/years/2019.json
+            data/years/2020.json
+            data/years/2021.json
+            data/years/2022.json
+            data/years/2023.json
+            data/years/2024.json
+            docs/data-and-methods.html
+            docs/validation-results.json
+          )
+          for path in "${required[@]}"; do
+            test -e "$SITE/$path"
+          done
+
+          node --check "$SITE/assets/app.js"
+
+          python3 - <<'PY'
+          import hashlib
+          import json
+          from pathlib import Path
+
+          root = Path('/tmp/netherlands-job-home-site')
+          years = list(range(2014, 2025))
+
+          manifest = json.loads((root / 'data/manifest.json').read_text(encoding='utf-8'))
+          validation = json.loads((root / 'docs/validation-results.json').read_text(encoding='utf-8'))
+          file_manifest = json.loads((root / 'FILE_MANIFEST.json').read_text(encoding='utf-8'))
+
+          assert manifest['schema_version'] == '1.0'
+          assert manifest['release_type'] == 'top70_edges_only'
+          assert manifest['years'] == years
+          assert manifest['default_year'] == 2024
+          assert manifest['directed'] is True
+          assert manifest['geography_count'] == 342
+          assert manifest['edge_retention']['retained_share'] == 0.7
+          assert abs(manifest['edge_retention']['omitted_share'] - 0.3) < 1e-12
+          assert manifest['edge_retention']['public_metrics_recomputed_from_retained_edges_only'] is True
+          assert manifest['edge_retention']['self_loops_published'] is False
+          assert manifest['edge_retention']['nonpositive_edges_published'] is False
+          assert manifest['edge_schema'] == ['source', 'target', 'weight']
+
+          assert validation['status'] == 'pass'
+          assert validation['years'] == years
+          assert validation['municipalities'] == 342
+          assert validation['retained_edge_share'] == 0.7
+          assert abs(validation['omitted_edge_share'] - 0.3) < 1e-12
+          assert all(validation['checks'].values())
+
+          expected_counts = validation['public_edge_counts']
+          for year in years:
+              rel = Path('data') / manifest['year_files'][str(year)]
+              obj = json.loads((root / rel).read_text(encoding='utf-8'))
+              assert obj['year'] == year
+              assert len(obj['nodes']) == 342
+              assert len(obj['edges']) == expected_counts[str(year)]
+              previous = float('inf')
+              for edge in obj['edges']:
+                  assert len(edge) == 3
+                  source, target, weight = edge
+                  assert isinstance(source, int) and 0 <= source < 342
+                  assert isinstance(target, int) and 0 <= target < 342
+                  assert source != target
+                  assert weight > 0
+                  assert weight <= previous
+                  previous = weight
+
+          assert file_manifest['self_excluded'] is True
+          listed = {row['path']: row for row in file_manifest['files']}
+          actual = {
+              str(path.relative_to(root)).replace('\\', '/')
+              for path in root.rglob('*') if path.is_file()
+          }
+          assert actual - {'FILE_MANIFEST.json'} == set(listed)
+          for rel, row in listed.items():
+              payload = (root / rel).read_bytes()
+              assert len(payload) == row['bytes']
+              assert hashlib.sha256(payload).hexdigest() == row['sha256']
+
+          forbidden_suffixes = {
+              '.parquet', '.shp', '.shx', '.dbf', '.prj', '.cpg',
+              '.qmd', '.ipynb', '.csv', '.xlsx', '.xls', '.zip'
+          }
+          assert not any(
+              path.suffix.lower() in forbidden_suffixes
+              for path in root.rglob('*') if path.is_file()
+          )
+          assert not (root / '_private_audit').exists()
+          print('Validation passed: 342 municipalities, 2014–2024, strongest 70% of positive non-self edges only.')
+          PY
+
+      - name: Publish clean site to gh-pages
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          cd /tmp/netherlands-job-home-site
+          rm -rf .git .github .release _private_audit
+          git init -b gh-pages
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Publish Dutch job-home spider network atlas v1.0"
+          git remote add origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          git push --force origin gh-pages
