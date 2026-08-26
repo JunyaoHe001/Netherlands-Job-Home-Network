@@ -37,8 +37,8 @@ jobs:
             curl --fail --location --retry 5 --retry-delay 3 --output "$OUT" "$FALLBACK_URL"
           fi
 
-          test "$(stat -c '%s' "$OUT")" -eq 398208
-          echo "316c4e9ff96bd38e664720d40ec05612292d9c4341010f4e35aea45b28428124  $OUT" | sha256sum --check --strict
+          test "$(stat -c '%s' "$OUT")" -eq 399488
+          echo "a1abf28c995e5ea87d08f5b7b791fb965d1c3cea0ae4236398c5454eea68eb80  $OUT" | sha256sum --check --strict
           unzip -t "$OUT"
 
       - name: Extract and validate public site
@@ -173,6 +173,6 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
-          git commit -m "Publish Dutch municipal job-home network atlas v1.0.1"
+          git commit -m "Publish Dutch municipal job-home network atlas v1.1.0"
           git remote add origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
           git push --force origin gh-pages
