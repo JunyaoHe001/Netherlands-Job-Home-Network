@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Data and release notes</title>
+  <style>body{font-family:system-ui,-apple-system,sans-serif;max-width:790px;margin:48px auto;padding:0 24px;color:#202838;line-height:1.65}h1{font-size:28px}h2{font-size:18px;margin-top:28px}code{background:#f1f3f6;padding:2px 5px;border-radius:4px}a{color:#315f91}</style>
+</head>
+<body>
+  <h1>Data and release notes</h1>
+  <p>This atlas shows annual home-to-work links between Dutch municipalities. Each arrow runs from the municipality of residence to the municipality of work.</p>
+
+  <h2>Public edge set</h2>
+  <p>The paper is still under review, so the public map does not include the full network. For each year, it keeps the strongest 70% of positive links between different municipalities and withholds the remaining 30%. Within-municipality links and zero-value pairs are not published. Equal-weight links at the cut-off are ordered with a fixed release-specific hash.</p>
+  <p>Municipality colours, node sizes, degree counts, totals, selected-municipality summaries and trend lines are all calculated from the released links. They do not use totals from the full private network.</p>
+
+  <h2>Published fields</h2>
+  <p>The browser receives a numeric release-specific municipality index, municipality name, simplified map geometry, representative point, released edge endpoints and released edge weight. Original municipality codes, source shapefile attributes, distances, within-municipality links, zero-value pairs and withheld links are not included.</p>
+
+  <h2>How to read the map</h2>
+  <p>The map is intended for visual inspection. Because it contains only a subset of links, its density and network measures should not be treated as estimates for the full private network.</p>
+
+  <p><a href="../">← Return to the atlas</a></p>
+</body>
+</html>

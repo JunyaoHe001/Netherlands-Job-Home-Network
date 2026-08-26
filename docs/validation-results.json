@@ -1,0 +1,45 @@
+{
+  "status": "pass",
+  "years": [
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024
+  ],
+  "municipalities": 342,
+  "retained_edge_share": 0.7,
+  "omitted_edge_share": 0.30000000000000004,
+  "public_edge_counts": {
+    "2014": 7093,
+    "2015": 7167,
+    "2016": 7221,
+    "2017": 7326,
+    "2018": 7460,
+    "2019": 7623,
+    "2020": 7570,
+    "2021": 6471,
+    "2022": 6657,
+    "2023": 6730,
+    "2024": 6767
+  },
+  "checks": {
+    "all_expected_years_present": true,
+    "all_municipalities_present": true,
+    "edge_endpoints_are_numeric_indices": true,
+    "self_loops_absent": true,
+    "nonpositive_edges_absent": true,
+    "edge_lists_sorted_descending": true,
+    "node_metrics_recomputed_from_public_edges": true,
+    "original_municipal_codes_absent": true,
+    "raw_source_files_absent": true,
+    "local_paths_absent": true,
+    "private_audit_excluded_from_site": true
+  }
+}

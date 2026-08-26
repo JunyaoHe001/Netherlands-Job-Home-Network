@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Interactive atlas of Dutch municipal home-to-work networks, 2014–2024.">
+  <title>Dutch Municipal Job–Home Network Atlas</title>
+  <link rel="stylesheet" href="assets/styles.css?v=20260826">
+</head>
+<body>
+  <main class="app-shell">
+    <aside class="sidebar">
+      <header class="project-header">
+        <div class="eyebrow">ONGOING RESEARCH · PUBLIC ATLAS</div>
+        <h1>Dutch Municipal Job–Home Network Atlas</h1>
+        <p class="subtitle">Municipal home-to-work networks · Netherlands · 2014–2024</p>
+        <p class="release-note"><strong>Public preview.</strong> For each year, the map includes the strongest 70% of positive links between municipalities. The remaining 30% and all within-municipality links are withheld while the paper is under review.</p>
+      </header>
+
+      <section class="control-section">
+        <div class="section-heading">Time</div>
+        <div class="year-row">
+          <button id="prevYear" class="icon-button" type="button" aria-label="Previous year">‹</button>
+          <button id="playYear" class="icon-button play-button" type="button" aria-label="Play years">▶</button>
+          <button id="nextYear" class="icon-button" type="button" aria-label="Next year">›</button>
+          <output id="yearValue" class="year-value">2024</output>
+        </div>
+        <input id="yearSlider" type="range" min="2014" max="2024" step="1" value="2024" aria-label="Year">
+      </section>
+
+      <section class="control-section">
+        <div class="section-heading">Network display</div>
+        <label class="field-label" for="metricSelect">Municipality colour</label>
+        <select id="metricSelect">
+          <option value="net">Net job-flow balance</option>
+          <option value="incoming">Incoming job flow</option>
+          <option value="outgoing">Outgoing job flow</option>
+          <option value="total">Total external flow</option>
+          <option value="in_degree">Incoming partners</option>
+          <option value="out_degree">Outgoing partners</option>
+        </select>
+
+        <label class="field-label" for="flowMode">Connections</label>
+        <select id="flowMode">
+          <option value="all">All retained links</option>
+          <option value="incident">Links involving selected municipality</option>
+          <option value="outgoing">Outgoing from selected municipality</option>
+          <option value="incoming">Incoming to selected municipality</option>
+        </select>
+
+        <label class="field-label" for="edgeLimit">Strongest links shown</label>
+        <select id="edgeLimit">
+          <option value="100">Top 100</option>
+          <option value="250">Top 250</option>
+          <option value="500" selected>Top 500</option>
+          <option value="1000">Top 1,000</option>
+          <option value="all">All retained</option>
+        </select>
+
+        <label class="field-label" for="minWeight">Minimum published edge weight: <span id="minWeightValue">0</span></label>
+        <input id="minWeight" type="range" min="0" max="30" step="0.1" value="0">
+
+        <label class="field-label" for="nodeSize">Node size</label>
+        <select id="nodeSize">
+          <option value="total">Total external flow</option>
+          <option value="incoming">Incoming flow</option>
+          <option value="outgoing">Outgoing flow</option>
+          <option value="uniform">Uniform</option>
+        </select>
+
+        <label class="toggle-row"><input id="shadeToggle" type="checkbox" checked> Shade municipalities by selected measure</label>
+        <label class="toggle-row"><input id="routeToggle" type="checkbox" checked> Show directed routes</label>
+        <label class="toggle-row"><input id="labelToggle" type="checkbox"> Label leading municipalities</label>
+      </section>
+
+      <section class="control-section">
+        <div class="section-heading">Find a municipality</div>
+        <div class="search-row">
+          <input id="searchInput" type="search" list="municipalityOptions" placeholder="Municipality name">
+          <datalist id="municipalityOptions"></datalist>
+          <button id="searchButton" class="small-button" type="button">Find</button>
+        </div>
+        <div class="button-row">
+          <button id="fitButton" class="secondary-button" type="button">Fit Netherlands</button>
+          <button id="clearButton" class="secondary-button" type="button">Clear focus</button>
+        </div>
+      </section>
+
+      <section class="stats-grid" aria-label="Current public-network statistics">
+        <div class="stat"><span class="stat-label">Municipalities</span><strong id="statRegions">342</strong></div>
+        <div class="stat"><span class="stat-label">Visible links</span><strong id="statLinks">—</strong></div>
+        <div class="stat"><span class="stat-label">Retained links</span><strong id="statRetained">—</strong></div>
+        <div class="stat"><span class="stat-label">Published weight</span><strong id="statWeight">—</strong></div>
+      </section>
+
+      <section id="selectedCard" class="selected-card" hidden>
+        <div class="section-heading">Selected municipality</div>
+        <h2 id="selectedName"></h2>
+        <div class="selected-metrics">
+          <div><span>Incoming</span><strong id="selIncoming">—</strong></div>
+          <div><span>Outgoing</span><strong id="selOutgoing">—</strong></div>
+          <div><span>Net balance</span><strong id="selNet">—</strong></div>
+          <div><span>Total flow</span><strong id="selTotal">—</strong></div>
+        </div>
+        <div class="partner-grid">
+          <div><div class="partner-title">Top destinations</div><ol id="destinationList"></ol></div>
+          <div><div class="partner-title">Top origins</div><ol id="originList"></ol></div>
+        </div>
+        <div class="partner-title">Public-network trend</div>
+        <svg id="trendChart" class="trend-chart" viewBox="0 0 280 80" role="img" aria-label="Selected municipality total public network flow by year"></svg>
+      </section>
+
+      <footer class="sidebar-footer">
+        <p>Direction: home municipality → work municipality. All municipality measures on this page are calculated from the released links only.</p>
+        <p><a href="docs/data-and-methods.html">Data, interpretation and release boundary</a></p>
+      </footer>
+    </aside>
+
+    <section class="map-panel">
+      <div class="map-toolbar">
+        <div><span class="toolbar-kicker">DUTCH JOB–HOME NETWORK</span><strong id="toolbarYear" class="toolbar-year">2024</strong></div>
+        <div id="toolbarNote" class="toolbar-note">Loading public atlas data…</div>
+      </div>
+      <svg id="mapSvg" class="map-svg" viewBox="0 0 1000 1050" aria-label="Interactive map of Dutch municipal job-home network flows">
+        <defs>
+          <marker id="arrow" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto" markerUnits="strokeWidth">
+            <path d="M0,0 L7,3.5 L0,7 Z" fill="#46637A"></path>
+          </marker>
+        </defs>
+        <rect class="map-background" x="-5000" y="-5000" width="10000" height="10000"></rect>
+        <g id="regionLayer"></g>
+        <g id="edgeLayer"></g>
+        <g id="nodeLayer"></g>
+        <g id="labelLayer"></g>
+      </svg>
+      <div class="legend">
+        <div id="legendTitle" class="legend-title">Net job-flow balance</div>
+        <div id="legendScale" class="legend-scale diverging"></div>
+        <div class="legend-values"><span id="legendLow">Lower</span><span id="legendMid">0</span><span id="legendHigh">Higher</span></div>
+      </div>
+      <div id="tooltip" class="tooltip" hidden></div>
+      <div class="map-help">Scroll to zoom · drag to pan · click a municipality to inspect its retained public network</div>
+    </section>
+  </main>
+  <script src="assets/app.js?v=20260826" defer></script>
+</body>
+</html>

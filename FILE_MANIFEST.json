@@ -1,0 +1,116 @@
+{
+  "schema_version": "1.0",
+  "self_excluded": true,
+  "files": [
+    {
+      "path": ".nojekyll",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "DATA-NOTES.md",
+      "bytes": 490,
+      "sha256": "d6deae0f8bf8a54a1ae978be1820ee920213fd06b0a57e7b3ce4e5a2bd7c6f42"
+    },
+    {
+      "path": "README.md",
+      "bytes": 707,
+      "sha256": "17659cadbb1e665592e5b923deecdbc5e1df030bc05d6a1377d2f81b28fbd258"
+    },
+    {
+      "path": "SANITISATION.md",
+      "bytes": 636,
+      "sha256": "ea54c882896ad16e99006696f4d2063972459d7c9b63d4dd9205d4cc0c79425e"
+    },
+    {
+      "path": "assets/app.js",
+      "bytes": 13987,
+      "sha256": "1cd751eec2e84e8574f5e44973049516206b4be9d9a3f89142b80669e8da86c6"
+    },
+    {
+      "path": "assets/styles.css",
+      "bytes": 6498,
+      "sha256": "dbba47d293c8b9231c550d902509917f0db28f1e7d930f0d27ef3b75f4ff8c9b"
+    },
+    {
+      "path": "data/manifest.json",
+      "bytes": 1507,
+      "sha256": "4570ec396430b2d8a5c0cb4f12073354d05845bcb5b68a8a137a4da9e570ae10"
+    },
+    {
+      "path": "data/map.json",
+      "bytes": 200640,
+      "sha256": "2a73e8d7129181dae8b4272f060b47d5a3f00a0a12be08d2ec166251b81cd6fa"
+    },
+    {
+      "path": "data/years/2014.json",
+      "bytes": 103757,
+      "sha256": "f209dcd3775243b4863caa40a2245cbd9a44854177334f8c267404cdb7cc6459"
+    },
+    {
+      "path": "data/years/2015.json",
+      "bytes": 104557,
+      "sha256": "63fd5e5e89270e275dddd876d263b4da99b631fe00777aca124ed0d5e4f8d9cb"
+    },
+    {
+      "path": "data/years/2016.json",
+      "bytes": 105385,
+      "sha256": "e9417e3acc671fda79daaa6a9772495cb27f49fd00d3fc5ffd2b58a5f8d0232f"
+    },
+    {
+      "path": "data/years/2017.json",
+      "bytes": 106819,
+      "sha256": "c40929651b4d83512427a4108530b15c791e28680cd9f3673149dc1b6a8d13cd"
+    },
+    {
+      "path": "data/years/2018.json",
+      "bytes": 108565,
+      "sha256": "9e92b7d19c37649e58dc824a7643d3155fcfcd3f8e80249d5f27d6aca102e217"
+    },
+    {
+      "path": "data/years/2019.json",
+      "bytes": 110514,
+      "sha256": "2709d7f7ddaa89a627bd0af176e0edff975a26d8f2a6fe9b90914c3b87e396d9"
+    },
+    {
+      "path": "data/years/2020.json",
+      "bytes": 109905,
+      "sha256": "ab362674202a71064815fbcbe186d6a74580a68becdb82d4bb8c3645d45091b7"
+    },
+    {
+      "path": "data/years/2021.json",
+      "bytes": 94732,
+      "sha256": "2bd356adafec076895dba3082359e8b3466c88abdd9cdf896f107d3b3e1d23a3"
+    },
+    {
+      "path": "data/years/2022.json",
+      "bytes": 97236,
+      "sha256": "22bece9dc94b12abbf3570c4f493a28d5849f60b8dd7ab50237528b5b53e457a"
+    },
+    {
+      "path": "data/years/2023.json",
+      "bytes": 98183,
+      "sha256": "8de35890884ff25fef3028335e72c938bfb981f4bf0b9990610d994655df4eea"
+    },
+    {
+      "path": "data/years/2024.json",
+      "bytes": 98665,
+      "sha256": "2537fd7535cee4d1be912ac9c434e05cfcabf09c4aa9d56c8de59e6b2ccb0b27"
+    },
+    {
+      "path": "docs/data-and-methods.html",
+      "bytes": 1936,
+      "sha256": "7aff5c06fdaac3d3602cdc718b1e9d480a9cecb426ff00ac41f0bb3118f74a30"
+    },
+    {
+      "path": "docs/validation-results.json",
+      "bytes": 949,
+      "sha256": "4f0421ee25c223763b28e0a431a5d9c064a012354bc18c0843de2e9f51046174"
+    },
+    {
+      "path": "index.html",
+      "bytes": 8022,
+      "sha256": "8b9fbfe3641337a7d0185892c68eebf64d101f816d4e75a4a5ce4f468c7397a1"
+    }
+  ]
+}
