@@ -1,0 +1,58 @@
+{
+  "status": "pass",
+  "date": "2026-11-04",
+  "source_url": "https://api.pdok.nl/cbs/wijken-en-buurten-2024/ogc/v1/collections/gemeenten/items?f=json&limit=1000",
+  "source_sha256": "ad866d66fba8a7d61b8cffc4cc1d4d5afad89f125866bd80396b77ecd12687d6",
+  "source_water_counts": {
+    "B": 1,
+    "JA": 81,
+    "NEE": 342
+  },
+  "land_records": 342,
+  "municipalities": 342,
+  "valid_display_geometries": 342,
+  "representative_points_on_land": 342,
+  "repositioned_display_node_indices": [
+    14,
+    41,
+    92,
+    117,
+    122,
+    130,
+    140,
+    164,
+    178,
+    179,
+    231,
+    243,
+    249,
+    269,
+    281,
+    296,
+    297,
+    309
+  ],
+  "old_mapped_area_km2": 41542.64,
+  "new_mapped_area_km2": 35080.437,
+  "water_points_excluded": {
+    "IJsselmeer": true,
+    "Markermeer": true,
+    "Waddenzee": true,
+    "North Sea": true,
+    "Oosterschelde": true,
+    "Haringvliet": true,
+    "Grevelingen": true
+  },
+  "land_and_island_points_retained": {
+    "Amsterdam": true,
+    "Utrecht": true,
+    "Groningen": true,
+    "Texel": true,
+    "Schiermonnikoog": true,
+    "Terschelling": true,
+    "Ameland": true
+  },
+  "municipality_index_and_name_order_preserved": true,
+  "network_data_changed": false,
+  "map_sha256": "50f1888dae0d1ae0930eea8ec0818a2192c9fea61f77f50ac56d80665d20a7e4"
+}

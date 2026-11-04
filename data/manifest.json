@@ -1,0 +1,64 @@
+{
+  "schema_version": "1.0",
+  "title": "Dutch Municipal Job–Home Network Atlas",
+  "subtitle": "Municipal home-to-work networks · Netherlands · 2014–2024",
+  "release_type": "top70_edges_only",
+  "years": [
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024
+  ],
+  "default_year": 2024,
+  "directed": true,
+  "geography_count": 342,
+  "map_file": "map.json",
+  "year_files": {
+    "2014": "years/2014.json",
+    "2015": "years/2015.json",
+    "2016": "years/2016.json",
+    "2017": "years/2017.json",
+    "2018": "years/2018.json",
+    "2019": "years/2019.json",
+    "2020": "years/2020.json",
+    "2021": "years/2021.json",
+    "2022": "years/2022.json",
+    "2023": "years/2023.json",
+    "2024": "years/2024.json"
+  },
+  "edge_retention": {
+    "basis": "positive non-self intermunicipal edges ranked within each year by descending source weight",
+    "retained_share": 0.7,
+    "omitted_share": 0.30000000000000004,
+    "ties": "deterministic release-specific hash",
+    "public_metrics_recomputed_from_retained_edges_only": true,
+    "self_loops_published": false,
+    "nonpositive_edges_published": false
+  },
+  "weight": {
+    "mode": "exact",
+    "label": "Job-flow weight (source units)",
+    "decimal_precision": 6
+  },
+  "default_visible_edges": 500,
+  "node_schema": [
+    "incoming",
+    "outgoing",
+    "net",
+    "total",
+    "in_degree",
+    "out_degree"
+  ],
+  "edge_schema": [
+    "source",
+    "target",
+    "weight"
+  ]
+}
