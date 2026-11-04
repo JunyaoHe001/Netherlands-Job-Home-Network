@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import shutil
 import sys
 from pathlib import Path
 
@@ -122,6 +123,29 @@ GitHub Actions checks the release archive, prepares the public files and publish
     encoding="utf-8",
 )
 
+# Keep reviewed display updates when rebuilding from the original release archive.
+# These overrides contain only public website files, never raw research inputs.
+overrides = Path(__file__).resolve().parents[1] / "site-overrides"
+for source in sorted(overrides.rglob("*")):
+    if source.is_file():
+        destination = root / source.relative_to(overrides)
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(source, destination)
+
+if (overrides / "data/map.json").is_file():
+    public_map = json.loads((root / "data/map.json").read_text(encoding="utf-8"))
+    land_check = json.loads(
+        (root / "docs/land-geometry-validation-20261104.json").read_text(encoding="utf-8")
+    )
+    assert public_map["geometry"]["coverage"] == "land_only"
+    assert len(public_map["regions"]) == 342
+    assert [row[0] for row in public_map["regions"]] == list(range(342))
+    assert land_check["status"] == "pass"
+    assert land_check["representative_points_on_land"] == 342
+    assert all(land_check["water_points_excluded"].values())
+    assert all(land_check["land_and_island_points_retained"].values())
+    assert hashlib.sha256((root / "data/map.json").read_bytes()).hexdigest() == land_check["map_sha256"]
+
 text_suffixes = {".html", ".md", ".json", ".js", ".css"}
 for path in root.rglob("*"):
     if path.is_file() and path.suffix.lower() in text_suffixes:
@@ -154,3 +178,4 @@ file_manifest = {
 )
 
 print(f"Final public wording applied; {len(rows)} files recorded in FILE_MANIFEST.json.")
+

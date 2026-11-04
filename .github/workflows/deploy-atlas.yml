@@ -6,6 +6,7 @@ on:
     paths:
       - '.github/workflows/deploy-atlas.yml'
       - '.github/scripts/finalize_release.py'
+      - '.github/site-overrides/**'
       - '.deploy-trigger'
   workflow_dispatch:
 
@@ -160,6 +161,9 @@ jobs:
         run: |
           set -euo pipefail
           python3 .github/scripts/finalize_release.py /tmp/netherlands-job-home-site
+          node --check /tmp/netherlands-job-home-site/assets/app.js
+          node --check /tmp/netherlands-job-home-site/assets/basemap.js
+          node --check /tmp/netherlands-job-home-site/assets/basemap-toggle.js
 
       - name: Publish clean site to gh-pages
         shell: bash
@@ -176,3 +180,4 @@ jobs:
           git commit -m "Publish Dutch municipal job-home network atlas v1.1.0"
           git remote add origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
           git push --force origin gh-pages
+
